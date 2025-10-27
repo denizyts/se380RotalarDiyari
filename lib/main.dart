@@ -1,3 +1,4 @@
+import 'package:deneme/screens/HomePage.dart' show HomePage;
 import 'package:flutter/material.dart';
 
 void main() {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
       ),
-      home: const MyHomePage(title: 'AAAAA'),
+      home: const HomePage(),
     );
   }
 }
