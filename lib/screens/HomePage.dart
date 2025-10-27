@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-
   const HomePage({super.key});
 
   @override
@@ -10,8 +9,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> with WidgetsBindingObserver {
-
-  int _selectedpage = 0;
+  int _selectedPage = 0;
 
   final List<String> _allRoutes = [
     'İstanbul - İzmir Rotası',
@@ -25,80 +23,131 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
     'İstanbul Boğaz Turu',
     'Ankara - Eskişehir Hızlı Rota'
   ];
-  List <String> founded_routes =[];
 
-  void _updateSelectedPageButton(int index){
+  List<String> _foundRoutes = [];
+
+  void _updateSelectedPageButton(int index) {
     setState(() {
-      _selectedpage=index;
+      _selectedPage = index;
     });
   }
+
   @override
   void initState() {
     super.initState();
-    founded_routes=_allRoutes;
+    _foundRoutes = _allRoutes;
   }
-  void _searchRoute(String query){
-    List <String> results =[];
-    if(query.isEmpty){
-      results=_allRoutes;
-    }else{
-      results=_allRoutes.where((route) => route.toLowerCase().contains(query.toLowerCase())).toList();
+
+  void _searchRoute(String query) {
+    List<String> results = [];
+    if (query.isEmpty) {
+      results = _allRoutes;
+    } else {
+      results = _allRoutes
+          .where((route) => route.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     }
     setState(() {
-      founded_routes=results;
+      _foundRoutes = results;
     });
   }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Keşfet"),
+        centerTitle: true,
+        backgroundColor: theme.colorScheme.primaryContainer,
+        elevation: 0,
       ),
       body: Column(
         children: [
+          // 🔍 Arama kutusu
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(16.0),
             child: TextField(
+              onChanged: _searchRoute,
               decoration: InputDecoration(
-                hintText: 'Search for rotes ...',
+                hintText: 'Rota ara...',
                 prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: theme.inputDecorationTheme.fillColor,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      BorderSide(color: theme.colorScheme.primary, width: 2),
                 ),
               ),
-                onChanged: (value){
-                _searchRoute(value);
-                }
             ),
           ),
+
+          // 📜 Liste
           Expanded(
-            child: ListView.builder(
-              itemCount: founded_routes.length, // Liste uzunluğu kadar öğe oluştur
-              itemBuilder: (context, index) => Card( // Her öğeyi daha şık bir Card içinde gösterelim
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: ListTile(
-                  title: Text(founded_routes[index]),
-                  onTap: () {
-                    // Kullanıcı bir rotaya tıkladığında ne olacağını buraya yazabilirsin.
-                    print('${founded_routes[index]} tıklandı.');
-                  },
-                ),
-              ),
-            ),
+            child: _foundRoutes.isEmpty
+                ? Center(
+                    child: Text(
+                      'Sonuç bulunamadı 😕',
+                      style: theme.textTheme.bodyMedium!
+                          .copyWith(color: theme.hintColor),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: _foundRoutes.length,
+                    itemBuilder: (context, index) => Card(
+                      elevation: 2,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      color: theme.cardColor,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        leading: CircleAvatar(
+                          backgroundColor: theme.colorScheme.primaryContainer,
+                          child: Icon(
+                            Icons.directions,
+                            color: theme.colorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                        title: Text(
+                          _foundRoutes[index],
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          debugPrint('${_foundRoutes[index]} tıklandı.');
+                        },
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
+
+      // 🔽 Alt menü
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Rotes'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ana Sayfa'),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Rotalar'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
-        currentIndex: _selectedpage,
+        currentIndex: _selectedPage,
         onTap: _updateSelectedPageButton,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey, // Seçili olmayanlar da gözükebilsin diye
+        selectedItemColor: theme.colorScheme.primary,
+        unselectedItemColor: theme.disabledColor,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
       ),
     );
   }
