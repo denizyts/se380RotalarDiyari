@@ -1,3 +1,4 @@
+import 'package:deneme/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'core/theme/theme.dart';
 import 'routes/app_routes.dart';

@@ -58,7 +58,7 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Keşfet"),
+        title: const Text("Ana Sayfa"),
         centerTitle: true,
         backgroundColor: theme.colorScheme.primaryContainer,
         elevation: 0,
@@ -132,22 +132,6 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ),
           ),
         ],
-      ),
-
-      // 🔽 Alt menü
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ana Sayfa'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Rotalar'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
-        currentIndex: _selectedPage,
-        onTap: _updateSelectedPageButton,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.disabledColor,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        type: BottomNavigationBarType.fixed,
-        elevation: 8,
       ),
     );
   }

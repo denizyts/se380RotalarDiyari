@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/widgets/custom_text_fields.dart';
 import '../../routes/app_routes.dart';
+import '../screens/main_screen.dart';
 import 'verify_sms.dart';
 
 class AuthForm extends StatefulWidget {
@@ -35,7 +36,10 @@ class _AuthFormState extends State<AuthForm> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Giriş başarılı ✅')),
           );
-          Navigator.pushReplacementNamed(context, AppRoutes.home);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+          );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Telefon numarası veya şifre hatalı ❌')),
